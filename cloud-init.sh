@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 echo "add public keys to authorized_keys"
 
 read -r -d '' public_keys <<'EOF'
@@ -13,9 +12,9 @@ echo "$public_keys" >> /home/ubuntu/.ssh/authorized_keys
 
 echo "install docker"
 export DEBIAN_FRONTEND=noninteractive
-sudo snap install -y docker
-sudo apt update
-sudo apt install -y docker.io 
+sudo snap install docker
+sudo apt-get update
+sudo apt-get install -y docker.io
 
 echo "start and enable docker on restart"
 sudo systemctl start docker
