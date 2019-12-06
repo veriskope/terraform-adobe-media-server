@@ -1,17 +1,17 @@
 resource "aws_internet_gateway" "default" {
-  vpc_id = "${aws_vpc.default.id}"
+  vpc_id = aws_vpc.default.id
 }
 
 resource "aws_route" "default" {
-    route_table_id = "${aws_vpc.default.main_route_table_id}"
+    route_table_id = aws_vpc.default.main_route_table_id
     destination_cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.default.id}"
+    gateway_id = aws_internet_gateway.default.id
 }
 
 resource "aws_security_group" "ams" {
   name = "ams"
   description = "Base security group for AMS instances"
-  vpc_id = "${aws_vpc.default.id}"
+  vpc_id = aws_vpc.default.id
 
   egress {
     description = "allow egress to anywhere"
@@ -67,19 +67,19 @@ resource "aws_security_group" "ams" {
     protocol  = "icmp"
     from_port = -1
     to_port   = -1
-    cidr_blocks = ["${aws_vpc.default.cidr_block}"]
+    cidr_blocks = [aws_vpc.default.cidr_block]
   }
 
   egress {
     protocol  = "icmp"
     from_port = -1
     to_port   = -1
-    cidr_blocks = ["${aws_vpc.default.cidr_block}"]
+    cidr_blocks = [aws_vpc.default.cidr_block]
   }
 }
 
 resource "aws_subnet" "ams_a" {
-  vpc_id            = "${aws_vpc.default.id}"
+  vpc_id            = aws_vpc.default.id
   cidr_block        = "192.168.0.0/24"
   availability_zone = "us-west-2a"
 }
