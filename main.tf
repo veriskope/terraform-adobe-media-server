@@ -2,13 +2,13 @@
 provider "aws" {
   version = "~> 2.0"
   region  = "us-west-2"
-  alias = "usw2"
+  alias   = "usw2"
 }
 
 provider "aws" {
   version = "~> 2.0"
   region  = "eu-west-2"
-  alias = "euw2"
+  alias   = "euw2"
 }
 
 # Bucket initially created using AWS CLI
@@ -54,10 +54,10 @@ resource "aws_s3_bucket" "terraform-remote-state" {
 
 # dynamodb table for locking the state file
 resource "aws_dynamodb_table" "terraform-state-lock" {
-  name = "terraform-state-lock.${data.aws_caller_identity.current.account_id}-${var.region}"
-  hash_key = "LockID"
-  read_capacity = 20
-  write_capacity = 20
+  name           = "terraform-state-lock.${data.aws_caller_identity.current.account_id}-${var.region}"
+  hash_key       = "LockID"
+  read_capacity  = 2
+  write_capacity = 2
 
   attribute {
     name = "LockID"
@@ -74,10 +74,10 @@ data "aws_caller_identity" "current" {}
 data "terraform_remote_state" "dynamodb-s3" {
   backend = "s3"
   config = {
-    bucket  = "ams-terraform-remote-state.${data.aws_caller_identity.current.account_id}-${var.region}"
+    bucket         = "ams-terraform-remote-state.${data.aws_caller_identity.current.account_id}-${var.region}"
     dynamodb_table = "terraform-state-lock"
-    encrypt = true
-    key     = "terraform.tfstate"
-    region  = "${var.region}"
+    encrypt        = true
+    key            = "terraform.tfstate"
+    region         = "${var.region}"
   }
 }
